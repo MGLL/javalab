@@ -1,5 +1,7 @@
 package com.github.mgll.model;
 
+import com.github.mgll.dto.BookCreate;
+
 public class Book {
 
   private Long id;
@@ -9,6 +11,10 @@ public class Book {
   public Book(String name, String authorName) {
     this.name = name;
     this.authorName = authorName;
+  }
+
+  public static Book fromBookCreate(BookCreate dto) {
+    return new Book(dto.getName(), dto.getAuthorName());
   }
 
   public Long getId() {

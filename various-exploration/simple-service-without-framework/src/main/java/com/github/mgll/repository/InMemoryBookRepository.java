@@ -35,4 +35,13 @@ public class InMemoryBookRepository implements BookRepository {
   public void delete(Book book) {
     BOOKS_STORE.remove(book.getId());
   }
+
+  // TODO: Think of a security, maybe check profile?
+  @Override
+  public void teardownForTests() {
+    for (Long id : BOOKS_STORE.keySet()) {
+      BOOKS_STORE.remove(id);
+    }
+    lastId = 0L;
+  }
 }
