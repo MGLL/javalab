@@ -14,16 +14,16 @@ public class BookTest {
   @Test
   void createBook_shouldBeSuccessful() {
     Book book = new Book(BOOK_NAME, AUTHOR_NAME);
-    Assertions.assertEquals(book.getName(), BOOK_NAME);
-    Assertions.assertEquals(book.getAuthorName(), AUTHOR_NAME);
+    Assertions.assertEquals(BOOK_NAME, book.getName());
+    Assertions.assertEquals(AUTHOR_NAME, book.getAuthorName());
   }
 
   @Test
   void createBookFromDto_shouldBeSuccessful() {
     BookCreate dto = new BookCreate(BOOK_NAME, AUTHOR_NAME);
     Book book = Book.fromBookCreate(dto);
-    Assertions.assertEquals(book.getName(), BOOK_NAME);
-    Assertions.assertEquals(book.getAuthorName(), AUTHOR_NAME);
+    Assertions.assertEquals(BOOK_NAME, book.getName());
+    Assertions.assertEquals(AUTHOR_NAME, book.getAuthorName());
   }
 
   @Test
@@ -31,7 +31,7 @@ public class BookTest {
     Book book = new Book(BOOK_NAME, AUTHOR_NAME);
     book.setName(NEW_BOOK_NAME);
     book.setAuthorName(NEW_AUTHOR_NAME);
-    Assertions.assertEquals(book.getName(), NEW_BOOK_NAME);
-    Assertions.assertEquals(book.getAuthorName(), NEW_AUTHOR_NAME);
+    Assertions.assertEquals(NEW_BOOK_NAME, book.getName());
+    Assertions.assertEquals(NEW_AUTHOR_NAME, book.getAuthorName());
   }
 }

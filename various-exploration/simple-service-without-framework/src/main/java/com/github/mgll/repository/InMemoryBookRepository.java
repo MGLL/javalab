@@ -4,6 +4,7 @@ import com.github.mgll.model.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryBookRepository implements BookRepository {
@@ -22,8 +23,9 @@ public class InMemoryBookRepository implements BookRepository {
   }
 
   @Override
-  public Book getBookById(Long id) {
-    return BOOKS_STORE.get(id);
+  public Optional<Book> getBookById(Long id) {
+    Book b = BOOKS_STORE.get(id);
+    return b == null ? Optional.empty() : Optional.of(b);
   }
 
   @Override

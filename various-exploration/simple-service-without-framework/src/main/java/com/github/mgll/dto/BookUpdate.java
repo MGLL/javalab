@@ -1,27 +1,16 @@
-package com.github.mgll.model;
+package com.github.mgll.dto;
 
-import com.github.mgll.dto.BookCreate;
-import com.github.mgll.dto.BookUpdate;
-
-public class Book {
-
+public class BookUpdate {
   private Long id;
   private String name;
   private String authorName;
 
-  public Book(String name, String authorName) {
+  public BookUpdate() {}
+
+  public BookUpdate(Long id, String name, String authorName) {
+    this.id = id;
     this.name = name;
     this.authorName = authorName;
-  }
-
-  public static Book fromBookCreate(BookCreate dto) {
-    return new Book(dto.getName(), dto.getAuthorName());
-  }
-
-  public static Book fromBookUpdate(BookUpdate dto) {
-    Book book = new Book(dto.getName(), dto.getAuthorName());
-    book.setId(dto.getId());
-    return book;
   }
 
   public Long getId() {

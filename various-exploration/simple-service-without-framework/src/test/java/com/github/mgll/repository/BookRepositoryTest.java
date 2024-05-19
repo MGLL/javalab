@@ -6,6 +6,7 @@ import static com.github.mgll.Constants.NEW_AUTHOR_NAME;
 import static com.github.mgll.Constants.NEW_BOOK_NAME;
 
 import com.github.mgll.model.Book;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,20 +22,34 @@ public class BookRepositoryTest {
   }
 
   @Test
-  void saveBook_shouldBeSuccessful() {
+  void saveBook_shouldCreateBook() {
     Book book = new Book(BOOK_NAME, AUTHOR_NAME);
     book = repository.save(book);
     Assertions.assertNotNull(book.getId());
-    Assertions.assertEquals(book.getId(), 1L);
+    Assertions.assertEquals(1L, book.getId());
 
-    Book foundBook = repository.getBookById(book.getId());
-    Assertions.assertNotNull(foundBook);
-    Assertions.assertEquals(foundBook.getName(), book.getName());
-    Assertions.assertEquals(foundBook.getAuthorName(), book.getAuthorName());
+    Optional<Book> optionalBook = repository.getBookById(book.getId());
+    Assertions.assertTrue(optionalBook.isPresent());
+    Book foundBook = optionalBook.get();
+    Assertions.assertEquals(book.getName(), foundBook.getName());
+    Assertions.assertEquals(book.getAuthorName(), foundBook.getAuthorName());
   }
 
   @Test
-  void saveMultipleBook_shouldBeSuccessful() {
+  void getNonExistingBook_optionalShouldBeEmpty() {
+    Optional<Book> optionalBook = repository.getBookById(100L);
+    Assertions.assertTrue(optionalBook.isEmpty());
+  }
+
+  @Test
+  void getExistingBook_optionalShouldNotBeEmpty() {
+    repository.save(new Book(BOOK_NAME, AUTHOR_NAME));
+    Optional<Book> optionalBook = repository.getBookById(1L);
+    Assertions.assertTrue(optionalBook.isPresent());
+  }
+
+  @Test
+  void saveMultipleBook_shouldCreateDifferentBooks() {
     Book firstBook = new Book(BOOK_NAME, AUTHOR_NAME);
     firstBook = repository.save(firstBook);
     Assertions.assertNotNull(firstBook.getId());
@@ -44,33 +59,35 @@ public class BookRepositoryTest {
     Assertions.assertNotNull(secondBook.getId());
 
     Assertions.assertNotEquals(firstBook.getId(), secondBook.getId());
-    Assertions.assertEquals(repository.getBooks().size(), 2);
+    Assertions.assertEquals(2, repository.getBooks().size());
   }
 
   @Test
-  void updateBook_shouldBeSuccessful() {
-    Book book = new Book(BOOK_NAME, AUTHOR_NAME);
-    book = repository.save(book);
+  void updateBook_shouldModifyBook() {
+    Book book = repository.save(new Book(BOOK_NAME, AUTHOR_NAME));
     Assertions.assertNotNull(book.getId());
 
-    Book foundBook = repository.getBookById(book.getId());
-    Assertions.assertNotNull(foundBook);
-    Assertions.assertEquals(foundBook.getName(), book.getName());
-    Assertions.assertEquals(foundBook.getAuthorName(), book.getAuthorName());
+    Optional<Book> optionalBook = repository.getBookById(book.getId());
+    Assertions.assertTrue(optionalBook.isPresent());
+
+    Book foundBook = optionalBook.get();
+    Assertions.assertEquals(book.getName(), foundBook.getName());
+    Assertions.assertEquals(book.getAuthorName(), foundBook.getAuthorName());
 
     foundBook.setName(NEW_BOOK_NAME);
     foundBook.setAuthorName(NEW_AUTHOR_NAME);
-    book = repository.save(book);
+    Book updatedBook = repository.save(foundBook);
 
-    Assertions.assertNotNull(book);
-    Assertions.assertEquals(book.getId(), foundBook.getId());
-    Assertions.assertEquals(book.getName(), NEW_BOOK_NAME);
-    Assertions.assertEquals(book.getAuthorName(), NEW_AUTHOR_NAME);
-    Assertions.assertEquals(repository.getBooks().size(), 1);
+    Assertions.assertNotNull(updatedBook);
+    Assertions.assertEquals(book.getId(), updatedBook.getId());
+    Assertions.assertEquals(foundBook.getId(), updatedBook.getId());
+    Assertions.assertEquals(NEW_BOOK_NAME, updatedBook.getName());
+    Assertions.assertEquals(NEW_AUTHOR_NAME, updatedBook.getAuthorName());
+    Assertions.assertEquals(1, repository.getBooks().size());
   }
 
   @Test
-  void deleteBook_shouldBeSuccessful() {
+  void deleteBook_shouldRemoveBook() {
     Book book = new Book(BOOK_NAME, AUTHOR_NAME);
     book = repository.save(book);
     Assertions.assertNotNull(book.getId());

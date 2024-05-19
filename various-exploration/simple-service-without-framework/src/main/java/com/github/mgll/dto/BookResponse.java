@@ -1,6 +1,8 @@
 package com.github.mgll.dto;
 
 import com.github.mgll.model.Book;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookResponse {
   private final Long id;
@@ -11,6 +13,14 @@ public class BookResponse {
     this.id = book.getId();
     this.name = book.getName();
     this.authorName = book.getAuthorName();
+  }
+
+  public static List<BookResponse> fromBooks(List<Book> books) {
+    List<BookResponse> responses = new ArrayList<>();
+    for (Book b : books) {
+      responses.add(new BookResponse(b));
+    }
+    return responses;
   }
 
   public Long getId() {
