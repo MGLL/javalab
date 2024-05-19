@@ -2,24 +2,29 @@ package com.github.mgll.repository;
 
 import com.github.mgll.model.Book;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+// it is actually a DAO
 public class InMemoryBookRepository implements BookRepository {
 
   private static final Map<Long, Book> BOOKS_STORE = new ConcurrentHashMap<>();
-  private Long lastId = 0L;
 
   @Override
   public Book save(Book book) {
     if (book.getId() == null) {
-      lastId++;
-      book.setId(lastId);
+      book.setId(getLastId());
     }
-    BOOKS_STORE.put(lastId, book);
+    BOOKS_STORE.put(book.getId(), book);
     return book;
+  }
+
+  private Long getLastId() {
+    if (BOOKS_STORE.isEmpty()) return 1L;
+    return Collections.max(BOOKS_STORE.keySet()) + 1L;
   }
 
   @Override
@@ -44,6 +49,5 @@ public class InMemoryBookRepository implements BookRepository {
     for (Long id : BOOKS_STORE.keySet()) {
       BOOKS_STORE.remove(id);
     }
-    lastId = 0L;
   }
 }
