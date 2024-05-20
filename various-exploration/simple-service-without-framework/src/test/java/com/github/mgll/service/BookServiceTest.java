@@ -42,15 +42,12 @@ public class BookServiceTest implements ApplicationBookContextSupport  {
     Long id = service().createBook(createDto).getId();
 
     BookUpdate updateDto = new BookUpdate(id, NEW_BOOK_NAME, NEW_AUTHOR_NAME);
-    service().updateBook(updateDto);
+    BookResponse response = service().updateBook(updateDto);
 
-    List<BookResponse> bookResponses = service().getBooks();
-    Assertions.assertEquals(1, bookResponses.size());
-
-    BookResponse bookResponse = bookResponses.getFirst();
-    Assertions.assertEquals(1L, bookResponse.getId());
-    Assertions.assertEquals(NEW_BOOK_NAME, bookResponse.getName());
-    Assertions.assertEquals(NEW_AUTHOR_NAME, bookResponse.getAuthorName());
+    Assertions.assertEquals(1L, response.getId());
+    Assertions.assertEquals(NEW_BOOK_NAME, response.getName());
+    Assertions.assertEquals(NEW_AUTHOR_NAME, response.getAuthorName());
+    Assertions.assertEquals(1, service().getBooks().size());
   }
 
   @Test

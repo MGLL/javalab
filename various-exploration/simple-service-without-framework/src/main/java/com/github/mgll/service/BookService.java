@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookService {
   BookResponse createBook(BookCreate dto);
-  void updateBook(BookUpdate dto) throws BookNotFoundException;
+  BookResponse updateBook(BookUpdate dto) throws BookNotFoundException;
   BookResponse getBook(Long id) throws BookNotFoundException;
   List<BookResponse> getBooks();
   void deleteBook(Long id) throws BookNotFoundException;

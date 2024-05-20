@@ -19,11 +19,12 @@ public class BookServiceImpl implements BookService, ApplicationBookContextSuppo
   }
 
   @Override
-  public void updateBook(BookUpdate dto) throws BookNotFoundException {
+  public BookResponse updateBook(BookUpdate dto) throws BookNotFoundException {
     Optional<Book> optionalBook = repository().getBookById(dto.getId());
     if (optionalBook.isEmpty()) throw new BookNotFoundException();
-    Book book = Book.fromBookUpdate(dto);
-    repository().save(book);
+    Book updatedBook = Book.fromBookUpdate(dto);
+    updatedBook = repository().save(updatedBook);
+    return new BookResponse(updatedBook);
   }
 
   @Override
