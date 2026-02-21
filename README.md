@@ -1,2 +1,3 @@
 # javalab
-Just a repo for various java stuff
+
+Migrated repository to [Codeberg](https://codeberg.org/MGLL/javalab)
